@@ -4,8 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microsoft-Email-Manager</title>
-    <link rel="icon" type="image/png" href="/static/assets/logo.png?v=20260406">
-    <link rel="shortcut icon" type="image/png" href="/static/assets/logo.png?v=20260406">
+    <link rel="icon" type="image/svg+xml" href="/static/assets/logo-black.svg?v=20260626">
+    <link rel="shortcut icon" type="image/svg+xml" href="/static/assets/logo-black.svg?v=20260626">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        /* 主题早应用：在首帧前根据 localStorage(mem.theme) 设置 data-theme，避免闪烁。 */
+        (function () {
+            try {
+                var saved = localStorage.getItem('mem.theme');
+                var mode = (saved === 'light' || saved === 'dark' || saved === 'system') ? saved : 'system';
+                var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var resolved = mode === 'system' ? (sysDark ? 'dark' : 'light') : mode;
+                document.documentElement.setAttribute('data-theme', resolved);
+            } catch (e) { /* ignore */ }
+        })();
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1758,36 +1773,129 @@
             }
         }
 
+        /* ============================================================
+           设计系统（依据 DESIGN.md，Vercel 风）— 与桌面端 app.css 对齐。
+           token 在 :root 声明（浅色，默认），深色在 :root[data-theme="dark"]
+           覆盖。旧的 --ui-* 变量保留为别名（指向新 token），整站随主题切换。
+           ============================================================ */
         :root {
-            --ui-bg: #eef2f7;
-            --ui-bg-deep: #dfe7f1;
-            --ui-surface: rgba(255, 255, 255, 0.86);
-            --ui-surface-strong: #ffffff;
-            --ui-surface-dark: linear-gradient(180deg, #0f172a 0%, #162033 52%, #1b2941 100%);
-            --ui-line: rgba(148, 163, 184, 0.18);
-            --ui-line-strong: rgba(148, 163, 184, 0.28);
-            --ui-text: #0f172a;
-            --ui-text-soft: #64748b;
-            --ui-brand: #2563eb;
-            --ui-brand-strong: #1d4ed8;
-            --ui-brand-soft: rgba(37, 99, 235, 0.14);
-            --ui-success: #0f9f6e;
-            --ui-danger: #dc2626;
-            --ui-warning: #d97706;
-            --ui-shadow: 0 24px 50px rgba(15, 23, 42, 0.08);
-            --ui-shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.06);
-            --ui-radius: 22px;
-            --ui-radius-sm: 14px;
+            /* 与主题无关：圆角 */
+            --r-xs: 4px; --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+            --r-pill: 100px; --r-full: 9999px;
+            /* 与主题无关：间距（4px 基） */
+            --s-xxs: 4px; --s-xs: 8px; --s-sm: 12px; --s-md: 16px; --s-lg: 24px;
+            --s-xl: 32px; --s-2xl: 40px; --s-3xl: 48px; --s-4xl: 64px;
+            /* 与主题无关：字体 */
+            --font-sans: "Geist", "Inter", system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            /* 与主题无关：品牌渐变 */
+            --grad-develop: linear-gradient(90deg, #007cf0, #00dfd8);
+            --grad-preview: linear-gradient(90deg, #7928ca, #ff0080);
+            --grad-ship: linear-gradient(90deg, #ff4d4d, #f9cb28);
+            --grad-mesh: linear-gradient(110deg, #007cf0 0%, #00dfd8 30%, #7928ca 55%, #ff0080 80%, #f9cb28 100%);
+
+            /* ===== 浅色（默认） ===== */
+            --canvas: #ffffff;
+            --canvas-soft: #fafafa;
+            --canvas-soft-2: #f5f5f5;
+            --hairline: #ebebeb;
+            --hairline-strong: #a1a1a1;
+            --ink: #171717;
+            --body: #4d4d4d;
+            --mute: #888888;
+            --primary: #171717;
+            --on-primary: #ffffff;
+            --link: #0070f3;
+            --link-deep: #0761d1;
+            --link-bg-soft: #d3e5ff;
+            --success: #0070f3;
+            --success-ink: #0a7d3e;
+            --success-soft: #d6f5e3;
+            --error: #ee0000;
+            --error-soft: #f7d4d6;
+            --error-deep: #c50000;
+            --warning: #f5a623;
+            --warning-soft: #ffefcf;
+            --warning-deep: #ab570a;
+            --cyan: #50e3c2;
+            --violet: #7928ca;
+            --focus-ring: #17171714;
+            --logo-invert: 0; /* 浅色用黑 logo */
+
+            --shadow-1: 0 0 0 1px #0000000f inset;
+            --shadow-2: 0px 1px 1px #00000005, 0px 2px 2px #0000000a, 0 0 0 1px #0000000f inset;
+            --shadow-3: 0px 2px 2px #0000000a, 0px 8px 8px -8px #0000000a, 0 0 0 1px #0000000f inset;
+            --shadow-4: 0px 2px 2px #0000000a, 0px 8px 16px -4px #0000000a, 0 0 0 1px #0000000f inset;
+            --shadow-5: 0px 1px 1px #00000005, 0px 8px 16px -4px #0000000a, 0px 24px 32px -8px #0000000f, 0 0 0 1px #0000000f inset;
+
+            /* ===== 兼容别名（旧组件引用 --ui-*，随主题自动跟随） ===== */
+            --ui-bg: var(--canvas-soft);
+            --ui-bg-deep: var(--canvas-soft-2);
+            --ui-surface: var(--canvas);
+            --ui-surface-strong: var(--canvas);
+            --ui-surface-dark: var(--primary);
+            --ui-line: var(--hairline);
+            --ui-line-strong: var(--hairline-strong);
+            --ui-text: var(--ink);
+            --ui-text-soft: var(--body);
+            --ui-brand: var(--link);
+            --ui-brand-strong: var(--link-deep);
+            --ui-brand-soft: var(--link-bg-soft);
+            --ui-success: var(--success);
+            --ui-danger: var(--error);
+            --ui-warning: var(--warning);
+            --ui-shadow: var(--shadow-4);
+            --ui-shadow-soft: var(--shadow-2);
+            --ui-radius: var(--r-lg);
+            --ui-radius-sm: var(--r-md);
+            color-scheme: light;
+        }
+
+        /* ===== 深色 ===== */
+        :root[data-theme="dark"] {
+            --canvas: #171a21;
+            --canvas-soft: #0f1115;
+            --canvas-soft-2: #1f232c;
+            --hairline: #2a2f3a;
+            --hairline-strong: #3a4150;
+            --ink: #e6e9ef;
+            --body: #b3bccb;
+            --mute: #8a93a3;
+            --primary: #e6e9ef;     /* 极性翻转：近白 CTA + 深字 */
+            --on-primary: #0f1115;
+            --link: #4a9eff;
+            --link-deep: #3b82f6;
+            --link-bg-soft: #15314f;
+            --success: #3fb950;
+            --success-ink: #7ee2a0;
+            --success-soft: #16331f;
+            --error: #f85149;
+            --error-soft: #3a1d1d;
+            --error-deep: #ff6b66;
+            --warning: #f5a623;
+            --warning-soft: #352a12;
+            --warning-deep: #f5c451;
+            --cyan: #50e3c2;
+            --violet: #a371f7;
+            --focus-ring: #ffffff22;
+            --logo-invert: 1;       /* 深色用白 logo（对黑 logo 取反） */
+
+            --shadow-1: 0 0 0 1px #ffffff14 inset;
+            --shadow-2: 0px 1px 2px #00000040, 0 0 0 1px #ffffff12 inset;
+            --shadow-3: 0px 2px 10px #00000050, 0 0 0 1px #ffffff12 inset;
+            --shadow-4: 0px 8px 24px #00000060, 0 0 0 1px #ffffff12 inset;
+            --shadow-5: 0px 16px 40px #00000070, 0 0 0 1px #ffffff14 inset;
+            color-scheme: dark;
         }
 
         body {
-            font-family: "IBM Plex Sans", "Segoe UI Variable", "Segoe UI", "PingFang SC", "Microsoft YaHei UI", sans-serif;
-            color: var(--ui-text);
-            background:
-                radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 30%),
-                radial-gradient(circle at top right, rgba(14, 165, 233, 0.12), transparent 22%),
-                linear-gradient(180deg, #f7f9fc 0%, var(--ui-bg) 100%);
+            font-family: var(--font-sans);
+            color: var(--ink);
+            background: var(--canvas-soft);
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            transition: background 0.2s, color 0.2s;
         }
 
         body::before {
@@ -5055,6 +5163,203 @@
                 padding: 0;
             }
         }
+
+        /* ============================================================
+           桌面端换肤层（Desktop re-skin）— 追加在最末，靠源码顺序覆盖
+           上方“玻璃拟态”重设层，统一为 DESIGN.md 的 Vercel 扁平风。
+           浅/深双主题随 :root[data-theme] 切换；旧类名沿用，仅改视觉。
+           ============================================================ */
+        a { color: var(--link); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        ::selection { background: var(--ink); color: var(--canvas); }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-thumb { background: #80808048; border-radius: var(--r-full); border: 2px solid transparent; background-clip: padding-box; }
+        ::-webkit-scrollbar-thumb:hover { background: #80808078; background-clip: padding-box; }
+        h1, h2, h3, h4 { letter-spacing: -0.02em; }
+
+        /* ---------- 应用壳：扁平全高侧栏 ---------- */
+        .app-container { padding: 0; gap: 0; height: 100vh; min-height: 100vh; align-items: stretch; }
+        .sidebar {
+            position: static; top: auto; left: auto;
+            width: 224px; height: 100%;
+            background: var(--canvas);
+            border: none; border-right: 1px solid var(--hairline);
+            border-radius: 0; box-shadow: none;
+        }
+        .sidebar::before { display: none; }
+        .sidebar.is-collapsed { width: 76px; }
+        .main-content { margin-left: 0; width: auto; flex: 1; min-width: 0; border-radius: 0; background: var(--canvas-soft); }
+        .sidebar.is-collapsed + .main-content { margin-left: 0; width: auto; }
+        .main-body { padding: var(--s-lg); background: transparent; }
+
+        /* ---------- 侧栏品牌 / Logo ---------- */
+        .sidebar-header { padding: var(--s-md) var(--s-sm) var(--s-sm); border-bottom: 1px solid var(--hairline); }
+        .sidebar-brand { justify-content: flex-start; gap: var(--s-xs); }
+        .sidebar-brand-main { gap: var(--s-xs); min-height: 0; }
+        .sidebar-logo { width: 30px; height: 30px; }
+        .sidebar-logo-image { filter: invert(var(--logo-invert)); }
+        .auth-brand-logo-image { filter: invert(var(--logo-invert)); }
+        .sidebar-title-stack h1 { color: var(--ink); font-size: 14px; letter-spacing: -0.01em; font-weight: 600; }
+        .brand-mark { color: var(--ink); }
+        .sidebar-title-stack p, .sidebar-header p { color: var(--mute); }
+
+        /* ---------- 导航项（左对齐 + subtle 激活 + 左侧指示条） ---------- */
+        .sidebar-nav { padding: var(--s-sm) var(--s-xs); gap: 2px; }
+        .nav-item { min-height: 38px; border-radius: var(--r-sm); color: var(--body); font-weight: 500; gap: var(--s-sm); padding: 0 var(--s-sm); }
+        .nav-item::before { inset: 8px auto 8px -1px; left: -1px; right: auto; width: 3px; background: var(--ink); border-radius: var(--r-full); opacity: 0; }
+        .nav-item:hover { background: var(--canvas-soft-2); color: var(--ink); }
+        .nav-item:hover::before { opacity: 0; }
+        .nav-item.active { background: var(--canvas-soft); color: var(--ink); }
+        .nav-item.active::before { opacity: 1; }
+        .nav-item .icon { width: 22px; height: 22px; flex: 0 0 22px; }
+        .nav-item .icon svg, .sidebar .nav-item .icon.ui-icon svg { width: 18px; height: 18px; flex: 0 0 18px; }
+
+        /* ---------- 侧栏底部工具 + 主题切换 ---------- */
+        .sidebar-footer { padding: var(--s-sm) var(--s-xs) var(--s-md); border-top: 1px solid var(--hairline); gap: var(--s-xs); }
+        .sidebar-footer-divider { background: var(--hairline); }
+        .sidebar-utility, .sidebar-toggle { min-height: 38px; height: 38px; border-radius: var(--r-sm); background: transparent; color: var(--body); border: 1px solid transparent; gap: var(--s-sm); padding: 0 var(--s-sm); }
+        .sidebar-utility:hover, .sidebar-toggle:hover { background: var(--canvas-soft-2); color: var(--ink); border-color: transparent; }
+        .sidebar-utility .ui-icon, .sidebar-toggle .ui-icon { width: 22px; height: 22px; flex: 0 0 22px; }
+        .sidebar-utility .ui-icon svg, .sidebar-toggle .ui-icon svg { width: 18px; height: 18px; flex: 0 0 18px; }
+        .sidebar-logout { background: transparent; color: var(--body); border-color: transparent; }
+        .sidebar-logout:hover { background: var(--error-soft); color: var(--error); border-color: transparent; }
+        .theme-toggle .ui-icon svg { width: 18px; height: 18px; }
+
+        /* ---------- 按钮 ---------- */
+        .btn { min-height: 34px; height: auto; border-radius: var(--r-sm); padding: 0 var(--s-sm); font-weight: 500; letter-spacing: 0; border: 1px solid var(--hairline); background: var(--canvas); color: var(--ink); box-shadow: none; }
+        .btn:hover { transform: none; background: var(--canvas-soft); border-color: var(--hairline-strong); box-shadow: none; }
+        .btn:active { transform: none; }
+        .btn:focus-visible { box-shadow: 0 0 0 3px var(--focus-ring); }
+        .btn-primary { background: var(--primary); color: var(--on-primary); border-color: var(--primary); box-shadow: none; }
+        .btn-primary:hover { background: var(--primary); filter: brightness(1.15); border-color: var(--primary); box-shadow: none; }
+        .btn-secondary { background: var(--canvas); color: var(--ink); border: 1px solid var(--hairline); box-shadow: none; }
+        .btn-secondary:hover { background: var(--canvas-soft); color: var(--ink); border-color: var(--hairline-strong); box-shadow: none; }
+        .btn-danger { background: var(--canvas); color: var(--error); border: 1px solid var(--error-soft); box-shadow: none; }
+        .btn-danger:hover { background: var(--error-soft); color: var(--error); border-color: var(--error); filter: none; }
+        .btn-sm { min-height: 28px; padding: 0 var(--s-xs); font-size: 13px; }
+        .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .btn.active, .btn-secondary.active { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+
+        /* ---------- 表单 / 选择 / 搜索 ---------- */
+        .form-control, .form-input, .filter-select, .search-input { border: 1px solid var(--hairline); border-radius: var(--r-sm); background: var(--canvas); color: var(--ink); box-shadow: none; }
+        .form-control:focus, .form-input:focus, .filter-select:focus, .search-input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
+        .form-input::placeholder, .search-input::placeholder, .form-control::placeholder { color: var(--mute); }
+        .form-label { color: var(--body); }
+        .filter-label { color: var(--mute); }
+        .search-container, .filter-container, .stats-container { border: 1px solid var(--hairline); background: var(--canvas); box-shadow: var(--shadow-2); border-radius: var(--r-lg); }
+        .search-icon { background: var(--canvas-soft-2); color: var(--ink); }
+
+        /* ---------- 卡片 ---------- */
+        .card { background: var(--canvas); border: none; border-radius: var(--r-lg); box-shadow: var(--shadow-2); backdrop-filter: none; padding: var(--s-lg); overflow: visible; }
+        .card::after { display: none; }
+
+        /* ---------- 统计卡 ---------- */
+        .stats-container { box-shadow: none; border: none; background: transparent; padding: 0; }
+        .stat-item { background: var(--canvas); border: none; border-radius: var(--r-lg); box-shadow: var(--shadow-2); }
+        .stat-value { color: var(--ink); }
+        .stat-label { color: var(--mute); }
+
+        /* ---------- 邮件 / 账户列表 ---------- */
+        .email-item, .account-item { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-md); }
+        .email-item:hover, .account-item:hover { background: var(--canvas-soft); border-color: var(--hairline); box-shadow: var(--shadow-3); }
+        .email-item.unread { border-left: 3px solid var(--link); }
+        .email-subject { color: var(--ink); }
+        .email-date, .email-from, .email-preview { color: var(--mute); }
+        .account-details h4 { color: var(--ink); }
+        .account-details p { color: var(--body); }
+        .email-avatar, .account-avatar { border-radius: var(--r-md); background: var(--canvas-soft-2); color: var(--ink); }
+        .email-avatar.has-avatar, .account-avatar.has-avatar { background: #fff; box-shadow: 0 0 0 1px var(--hairline) inset; }
+
+        /* ---------- 标签 / 徽章 ---------- */
+        .account-tag { background: var(--canvas-soft-2); color: var(--body); border: 1px solid var(--hairline); border-radius: var(--r-full); }
+        .account-tag.category { background: var(--canvas-soft); color: var(--ink); }
+
+        /* ---------- 邮件行：验证码药丸 + 账户切换工具条 ---------- */
+        .email-item { align-items: center; }
+        .email-code-chip {
+            align-self: center; flex-shrink: 0; height: 30px; padding: 0 10px; margin-left: var(--s-xs);
+            display: inline-flex; align-items: center; gap: 6px;
+            border-radius: var(--r-full); border: 1px solid transparent;
+            background: var(--link-bg-soft); color: var(--link-deep); cursor: pointer;
+        }
+        .email-code-chip:hover { border-color: var(--link); }
+        .email-code-chip .ui-icon { width: 13px; height: 13px; }
+        .email-code-chip .ui-icon svg { width: 13px; height: 13px; }
+        .email-code-val { font-family: var(--font-mono); font-weight: 700; letter-spacing: 1px; font-size: 13px; }
+        .email-account-select-mount { display: inline-flex; }
+        .email-quick-pin.active { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+        .email-account-toolbar { display: flex; align-items: center; gap: var(--s-xs); flex-wrap: wrap; }
+        /* 详情：验证码横幅 */
+        .email-code-banner {
+            display: flex; align-items: center; gap: var(--s-sm);
+            padding: var(--s-sm) var(--s-md); margin-bottom: var(--s-md);
+            background: var(--link-bg-soft); border-radius: var(--r-md);
+        }
+        .email-code-banner .cb-label { font-size: 12px; color: var(--link-deep); white-space: nowrap; }
+        .email-code-banner .cb-code { flex: 1; font-family: var(--font-mono); font-size: 20px; font-weight: 700; letter-spacing: 2px; color: var(--ink); }
+
+        /* ---------- 标签页（inbox/junk/all） ---------- */
+        .tab { color: var(--body); border-radius: var(--r-sm); }
+        .tab:hover { color: var(--ink); }
+        .tab.active { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+
+        /* ---------- 模态框 ---------- */
+        .modal { background: rgba(15, 23, 42, 0.42); }
+        .modal-content { background: var(--canvas); border-radius: var(--r-xl); box-shadow: var(--shadow-5); border: none; }
+        .modal-header { border-bottom: 1px solid var(--hairline); }
+        .modal-header h3 { color: var(--ink); }
+        .modal-close, .close { color: var(--body); }
+
+        /* ---------- 通知 / toast ---------- */
+        .notification { background: var(--canvas); box-shadow: var(--shadow-4); border-radius: var(--r-md); color: var(--ink); border: none; }
+
+        /* ============================================================
+           自定义 Select（邮件账户切换下拉，显示分类/标签）—— 取自桌面端 Select.svelte
+           ============================================================ */
+        .mem-select { position: relative; display: inline-flex; vertical-align: middle; }
+        .mem-select-trigger {
+            width: 100%; height: 40px; padding: 0 var(--s-sm);
+            display: inline-flex; align-items: center; justify-content: space-between; gap: var(--s-xs);
+            border: 1px solid var(--hairline); background: var(--canvas); color: var(--ink);
+            border-radius: var(--r-sm); font: inherit; font-weight: 400; cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .mem-select-trigger:hover { border-color: var(--hairline-strong); }
+        .mem-select.open .mem-select-trigger { border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
+        .mem-select.sm .mem-select-trigger { height: 36px; }
+        .mem-select:where(.disabled) .mem-select-trigger { opacity: 0.5; cursor: not-allowed; }
+        .mem-cur { display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; }
+        .mem-cur-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mem-cur-badges { display: inline-flex; gap: 4px; flex-shrink: 0; }
+        .mem-ph { color: var(--mute); }
+        .mem-chev { flex-shrink: 0; color: var(--mute); transition: transform 0.18s ease; }
+        .mem-select.open .mem-chev { transform: rotate(180deg); }
+        .mem-select-menu {
+            position: absolute; top: calc(100% + 6px); left: 0; z-index: 1200;
+            min-width: 100%; max-height: 320px; overflow: auto; padding: 5px;
+            background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-lg);
+            box-shadow: var(--shadow-5); display: flex; flex-direction: column; gap: 2px;
+            animation: mem-pop-in 0.14s ease both;
+        }
+        .mem-select-menu.right { left: auto; right: 0; }
+        @keyframes mem-pop-in { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .mem-opt {
+            width: 100%; min-height: 36px; height: auto;
+            display: flex; align-items: center; justify-content: flex-start; gap: var(--s-xs);
+            padding: 7px var(--s-xs) 7px var(--s-sm);
+            border: 1px solid transparent; background: transparent; color: var(--ink);
+            border-radius: var(--r-sm); text-align: left; font: inherit; font-weight: 400; cursor: pointer;
+        }
+        .mem-opt:hover { background: var(--canvas-soft-2); }
+        .mem-opt.on { background: var(--canvas-soft); }
+        .mem-opt-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+        .mem-opt-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mem-opt-sub { font-size: 11px; color: var(--mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mem-opt-badges { display: inline-flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; flex-shrink: 0; max-width: 50%; }
+        .mem-tick { width: 15px; flex-shrink: 0; color: var(--link); display: inline-flex; align-items: center; }
+        .mem-badge { display: inline-flex; align-items: center; padding: 1px 7px; border-radius: var(--r-full); font-size: 11px; line-height: 1.5; background: var(--primary); color: var(--on-primary); white-space: nowrap; }
+        .mem-badge.soft { background: var(--canvas-soft-2); color: var(--body); border: 1px solid var(--hairline); }
+        .mem-select-empty { padding: var(--s-sm); font-size: 13px; text-align: center; color: var(--mute); }
     </style>
 </head>
 <body class="app-booting">
@@ -5071,7 +5376,7 @@
             <div class="auth-screen-brand">
                 <div class="auth-brand">
                     <div class="auth-brand-logo is-placeholder" id="authBrandLogoWrap">
-                        <img id="authBrandLogo" class="auth-brand-logo-image" src="/static/assets/logo.png" alt="Microsoft-Email-Manager logo" onload="this.parentElement.classList.remove('is-placeholder')" onerror="this.style.display='none'; this.parentElement.classList.add('is-placeholder')">
+                        <img id="authBrandLogo" class="auth-brand-logo-image" src="/static/assets/logo-black.svg?v=20260626" alt="Microsoft-Email-Manager logo" onload="this.parentElement.classList.remove('is-placeholder')" onerror="this.style.display='none'; this.parentElement.classList.add('is-placeholder')">
                         <span class="auth-brand-mark">MEM</span>
                     </div>
                     <div class="auth-brand-copy">
@@ -5082,7 +5387,7 @@
             </div>
             <div class="auth-login-brand" aria-hidden="true">
                 <div class="auth-brand-logo auth-brand-logo-lg is-placeholder">
-                    <img class="auth-brand-logo-image" src="/static/assets/logo.png" alt="Microsoft-Email-Manager logo" onload="this.parentElement.classList.remove('is-placeholder')" onerror="this.style.display='none'; this.parentElement.classList.add('is-placeholder')">
+                    <img class="auth-brand-logo-image" src="/static/assets/logo-black.svg?v=20260626" alt="Microsoft-Email-Manager logo" onload="this.parentElement.classList.remove('is-placeholder')" onerror="this.style.display='none'; this.parentElement.classList.add('is-placeholder')">
                     <span class="auth-brand-mark">MEM</span>
                 </div>
                 <div class="auth-login-brand-copy">
@@ -5221,7 +5526,7 @@
                 <div class="sidebar-brand">
                     <div class="sidebar-brand-main">
                         <div class="sidebar-logo is-placeholder" id="sidebarLogoWrap">
-                            <img id="sidebarLogo" class="sidebar-logo-image" src="/static/assets/logo.png" alt="Microsoft-Email-Manager logo" onload="this.parentElement.classList.remove('is-placeholder')" onerror="this.style.display='none'; this.parentElement.classList.add('is-placeholder')">
+                            <img id="sidebarLogo" class="sidebar-logo-image" src="/static/assets/logo-black.svg?v=20260626" alt="Microsoft-Email-Manager logo" onload="this.parentElement.classList.remove('is-placeholder')" onerror="this.style.display='none'; this.parentElement.classList.add('is-placeholder')">
                             <span class="brand-mark">MEM</span>
                         </div>
                         <div class="sidebar-title-stack">
@@ -5234,6 +5539,10 @@
                 <button id="accountsNav" class="nav-item active" type="button" data-page="accounts" onclick="showPage('accounts', this)">
                     <span class="icon"></span>
                     <span class="nav-item-text">邮箱账户管理</span>
+                </button>
+                <button id="quickViewNav" class="nav-item" type="button" data-page="quickView" onclick="showPage('quickView', this)">
+                    <span class="icon"></span>
+                    <span class="nav-item-text">快捷查看</span>
                 </button>
                 <button class="nav-item" type="button" data-page="addAccount" onclick="showPage('addAccount', this)">
                     <span class="icon"></span>
@@ -5272,6 +5581,10 @@
                 <button id="sidebarToggle" class="sidebar-toggle" type="button" onclick="toggleSidebar()" data-tooltip="收起侧栏" aria-label="收起侧栏">
                     <span></span>
                     <span class="sidebar-utility-label">收起</span>
+                </button>
+                <button id="themeToggleBtn" class="sidebar-utility theme-toggle" type="button" onclick="cycleTheme()" data-tooltip="主题" aria-label="切换主题">
+                    <span></span>
+                    <span class="sidebar-utility-label" id="themeToggleLabel">主题</span>
                 </button>
                 <div class="sidebar-footer-divider"></div>
                 <button id="logoutBtn" class="sidebar-utility sidebar-logout" type="button" onclick="logout()" data-tooltip="退出登录" aria-label="退出登录">
@@ -6414,10 +6727,12 @@ example3@outlook.com----password3----client_id3----refresh_token3"></textarea>
                                 <div class="email-account-switcher">
                                     <label class="email-account-switcher-label" for="currentAccountSelect">当前账户 / 快速切换 / 复制 / 快捷绑定</label>
                                     <div class="email-account-toolbar">
-                                        <select id="currentAccountSelect" class="form-input email-account-select" onchange="switchCurrentAccount(this.value)">
-                                            <option value="">请选择账户</option>
-                                        </select>
-                                        <button type="button" class="copy-icon email-account-copy-btn" onclick="copyEmailAddress(document.getElementById('currentAccountSelect').value)" title="复制当前账户"><span></span></button>
+                                        <button type="button" class="copy-icon email-account-copy-btn" onclick="copyEmailAddress(currentAccount)" title="复制当前账户"><span></span></button>
+                                        <div id="currentAccountSelectMount" class="email-account-select-mount"></div>
+                                        <button type="button" id="quickPinBtn" class="btn btn-secondary btn-sm email-quick-pin" onclick="toggleQuickPin()" title="加入快捷查看">
+                                            <span></span>
+                                            <span class="quick-pin-label">加入快捷查看</span>
+                                        </button>
                                         <div class="email-account-menu">
                                             <button type="button" id="accountBindMenuBtn" class="btn btn-secondary btn-sm email-account-menu-btn" onclick="toggleAccountBindMenu()">
                                                 <span></span>
@@ -6449,7 +6764,7 @@ example3@outlook.com----password3----client_id3----refresh_token3"></textarea>
                                     <span></span>
                                     导出
                                 </button>
-                                <button class="btn btn-secondary btn-sm" onclick="backToAccounts()">
+                                <button class="btn btn-secondary btn-sm" id="backToAccountsBtn" onclick="backToAccounts()">
                                     <span></span>
                                     返回账户
                                 </button>
@@ -6804,7 +7119,15 @@ example3@outlook.com----password3----client_id3----refresh_token3"></textarea>
             loading: '<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3.02-6.72"></path></svg>',
             unread: '<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M4 6l8 6 8-6"></path></svg>',
             read: '<svg viewBox="0 0 24 24"><path d="M22 6l-10 7L2 6"></path><path d="M2 6v12h20V6"></path><path d="M2 18l6-6"></path><path d="M22 18l-6-6"></path></svg>',
-            attachment: '<svg viewBox="0 0 24 24"><path d="M21.44 11.05l-8.49 8.49a6 6 0 1 1-8.49-8.49l9.19-9.19a4 4 0 1 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.82-2.83l8.48-8.48"></path></svg>'
+            attachment: '<svg viewBox="0 0 24 24"><path d="M21.44 11.05l-8.49 8.49a6 6 0 1 1-8.49-8.49l9.19-9.19a4 4 0 1 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.82-2.83l8.48-8.48"></path></svg>',
+            quick: '<svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>',
+            pin: '<svg viewBox="0 0 24 24"><path d="M12 17v5"></path><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path></svg>',
+            sun: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>',
+            moon: '<svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>',
+            monitor: '<svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>',
+            check: '<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>',
+            'chevron-down': '<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>',
+            bell: '<svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>'
         };
         let currentAccount = null;
         let currentEmailFolder = 'all';
@@ -8117,11 +8440,11 @@ example3@outlook.com----password3----client_id3----refresh_token3"></textarea>
 
         function decorateStaticUi() {
             const navButtons = document.querySelectorAll('.sidebar .nav-item[data-page]');
-            ['accounts', 'plus', 'batch', 'classification', 'key', 'api', 'settings', 'mail'].forEach((name, index) => {
+            ['accounts', 'quick', 'plus', 'batch', 'classification', 'key', 'api', 'settings', 'mail'].forEach((name, index) => {
                 setButtonIcon(navButtons[index], name, true);
             });
 
-            const navLabels = ['邮箱账户管理', '添加账户', '批量添加', '分类编辑', 'API 密钥', 'API 文档', '设置', '邮件列表'];
+            const navLabels = ['邮箱账户管理', '快捷查看', '添加账户', '批量添加', '分类编辑', 'API 密钥', 'API 文档', '设置', '邮件列表'];
             navButtons.forEach((button, index) => {
                 const label = navLabels[index];
                 if (!label) return;
@@ -8134,6 +8457,7 @@ example3@outlook.com----password3----client_id3----refresh_token3"></textarea>
 
             setButtonIcon(document.getElementById('sidebarToggle'), 'arrow-left');
             setButtonIcon(document.getElementById('logoutBtn'), 'logout');
+            initTheme();
             applySidebarState(readSidebarState());
             toggleCustomDateRange();
             toggleEmailSearch(window.innerWidth <= 768);
@@ -8190,6 +8514,7 @@ example3@outlook.com----password3----client_id3----refresh_token3"></textarea>
             setButtonIcon(document.querySelector('#emailsPage .btn-secondary.btn-sm[onclick="backToAccounts()"]'), 'arrow-left');
             setButtonIcon(document.querySelector('#emailsPage .btn-secondary.btn-sm[onclick="clearFilters()"]'), 'clear');
             setButtonIcon(document.querySelector('.email-account-copy-btn'), 'copy');
+            setButtonIcon(document.getElementById('quickPinBtn'), 'pin');
             setButtonIcon(document.getElementById('accountBindMenuBtn'), 'tags');
             updateAutoRefreshButton();
 
@@ -8311,6 +8636,7 @@ example3@outlook.com----password3----client_id3----refresh_token3"></textarea>
         }
 
         function showPage(pageName, targetElement = null, updateRoute = true) {
+            if (pageName === 'quickView') { openQuickView(); return; }
             document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
             document.getElementById(pageName + 'Page').classList.remove('hidden');
             syncSidebarContext(pageName);
@@ -10909,18 +11235,18 @@ Authorization: Bearer om_your_api_key
 
         function updateCurrentAccountHeader(accountId = currentAccount) {
             const accountLabel = document.getElementById('currentAccountEmail');
-            const accountSelect = document.getElementById('currentAccountSelect');
             if (accountLabel) {
                 accountLabel.textContent = accountId || '';
             }
-            if (accountSelect && accountId) {
-                accountSelect.value = accountId;
+            if (accountSelectInstance && accountId) {
+                accountSelectInstance.setValue(accountId);
             }
+            refreshQuickPinBtn();
         }
 
         async function populateAccountSwitcher(selectedAccount = currentAccount) {
-            const accountSelect = document.getElementById('currentAccountSelect');
-            if (!accountSelect) return;
+            const mount = document.getElementById('currentAccountSelectMount');
+            if (!mount) return;
 
             let optionAccounts = Array.isArray(accounts) ? [...accounts] : [];
             try {
@@ -10939,15 +11265,31 @@ Authorization: Bearer om_your_api_key
                 uniqueAccounts.push(account);
             });
 
-            if (selectedAccount && !seen.has(selectedAccount)) {
-                uniqueAccounts.unshift({ email_id: selectedAccount });
+            // 快捷查看模式：下拉只列出已固定的邮箱
+            let visibleAccounts = emailView.mode === 'quick'
+                ? uniqueAccounts.filter(a => isQuick(a.email_id))
+                : uniqueAccounts;
+
+            if (selectedAccount && !visibleAccounts.some(a => a.email_id === selectedAccount)) {
+                visibleAccounts = [{ email_id: selectedAccount }].concat(visibleAccounts);
             }
 
-            accountSelect.innerHTML = uniqueAccounts.map(account => {
-                const emailId = account.email_id;
-                const selected = emailId === selectedAccount ? ' selected' : '';
-                return `<option value="${escapeHtml(emailId)}"${selected}>${escapeHtml(emailId)}</option>`;
-            }).join('');
+            const options = buildAccountSelectOptions(visibleAccounts);
+            if (!accountSelectInstance) {
+                accountSelectInstance = createMemSelect({
+                    options: options,
+                    value: selectedAccount || '',
+                    placeholder: '请选择账户',
+                    width: '300px',
+                    menuWidth: '360px',
+                    onchange: function (v) { switchCurrentAccount(v); }
+                });
+                mount.innerHTML = '';
+                mount.appendChild(accountSelectInstance.el);
+            } else {
+                accountSelectInstance.setOptions(options);
+                accountSelectInstance.setValue(selectedAccount || '');
+            }
         }
 
         function switchCurrentAccount(emailId) {
@@ -10959,12 +11301,20 @@ Authorization: Bearer om_your_api_key
             updateCurrentAccountHeader(emailId);
             resetEmailListState({ showLoading: true });
             clearFilters(false);
-            navigateAdmin('/emails/' + encodeURIComponent(emailId));
+            if (emailView.mode === 'quick') {
+                setCurrentQuick(emailId);
+                loadEmails();
+                refreshQuickPinBtn();
+            } else {
+                navigateAdmin('/emails/' + encodeURIComponent(emailId));
+            }
             syncAutoRefreshTimer();
         }
 
         // 邮件管理
         function viewAccountEmails(emailId) {
+            emailView.mode = 'normal';
+            updateEmailViewModeUi();
             currentAccount = emailId;
             currentEmailFolder = 'all';
             currentEmailPage = 1;
@@ -10978,6 +11328,8 @@ Authorization: Bearer om_your_api_key
 
         function backToAccounts() {
             closeAccountBindMenu();
+            emailView.mode = 'normal';
+            updateEmailViewModeUi();
             resetEmailListState();
             currentAccount = null;
             navigateAdmin('/accounts');
@@ -11000,36 +11352,31 @@ Authorization: Bearer om_your_api_key
                 });
             }
 
+            // 切换文件夹也属于切换视图：重置上下文，避免旧文件夹结果回填
+            emailView.reset();
             loadEmails();
         }
 
         function abortActiveEmailRequest() {
-            if (activeEmailRequestController) {
-                activeEmailRequestController.abort();
-                activeEmailRequestController = null;
-            }
+            emailView.abort();
         }
 
         function resetEmailListState(options = {}) {
             const { showLoading = false } = options;
-            abortActiveEmailRequest();
-            activeEmailRequestId += 1;
-            isLoadingEmails = false;
-            allEmails = [];
-            filteredEmails = [];
-            pendingInsertedEmailIds = [];
-            currentEmailMessageId = null;
-            currentEmailTagKeys = [];
+            // 统一交由邮件视图状态模块重置：中止在途请求、作废旧请求、清空列表
+            emailView.reset();
             updateEmailStats([]);
             updateEmailsPagination(0, EMAIL_LIST_PAGE_SIZE);
-            document.getElementById('lastUpdateTime').textContent = '-';
+            const updated = document.getElementById('lastUpdateTime');
+            if (updated) updated.textContent = '-';
 
             const emailsList = document.getElementById('emailsList');
             if (emailsList) {
                 emailsList.innerHTML = showLoading
                     ? '<div class="loading"><div class="loading-spinner"></div>正在加载邮件...</div>'
-                    : '<div class="text-center" style="padding: 40px; color: #64748b;">没有找到匹配的邮件</div>';
+                    : '<div class="text-center" style="padding: 40px; color: var(--mute);">没有找到匹配的邮件</div>';
             }
+            refreshQuickPinBtn();
         }
 
         async function loadEmails(forceRefresh = false) {
@@ -11038,15 +11385,14 @@ Authorization: Bearer om_your_api_key
             const emailsList = document.getElementById('emailsList');
             const refreshBtn = document.getElementById('refreshBtn');
             const autoRefreshBtn = document.getElementById('autoRefreshBtn');
-            const requestAccount = currentAccount;
-            const requestFolder = currentEmailFolder;
-            const requestPage = currentEmailPage;
-            const requestId = activeEmailRequestId + 1;
             const requestController = new AbortController();
             updateCurrentAccountHeader(currentAccount);
-            abortActiveEmailRequest();
-            activeEmailRequestController = requestController;
-            activeEmailRequestId = requestId;
+            // 通过邮件视图状态模块登记请求，拿到当前视图的快照令牌（账户/文件夹/页/请求号）
+            const requestToken = emailView.begin(requestController);
+            const requestAccount = requestToken.account;
+            const requestFolder = requestToken.folder;
+            const requestPage = requestToken.page;
+            const requestId = requestToken.id;
             isLoadingEmails = true;
             const hasExistingEmails = Array.isArray(allEmails) && allEmails.length > 0;
             const shouldProbeLatest = hasExistingEmails && requestPage === 1;
@@ -11067,12 +11413,7 @@ Authorization: Bearer om_your_api_key
                 const url = `/emails/${requestAccount}?folder=${requestFolder}&page=${pageToLoad}&page_size=${requestPageSize}${refreshParam}`;
                 const data = await apiRequest(url, { signal: requestController.signal });
 
-                if (
-                    requestId !== activeEmailRequestId ||
-                    requestAccount !== currentAccount ||
-                    requestFolder !== currentEmailFolder ||
-                    requestPage !== currentEmailPage
-                ) {
+                if (emailView.isStale(requestToken)) {
                     return;
                 }
 
@@ -11107,7 +11448,7 @@ Authorization: Bearer om_your_api_key
                 }
 
             } catch (error) {
-                if (error.name === 'AbortError' || requestId !== activeEmailRequestId) {
+                if (error.name === 'AbortError' || emailView.isStale(requestToken)) {
                     return;
                 }
                 if (!shouldProbeLatest) {
@@ -11115,12 +11456,12 @@ Authorization: Bearer om_your_api_key
                 }
                 showNotification('加载邮件失败: ' + error.message, 'error');
             } finally {
-                if (requestId !== activeEmailRequestId) {
+                if (emailView.isStale(requestToken)) {
                     return;
                 }
-                // Restore refresh button state
+                // 仅当前活动请求负责复位按钮状态
                 isLoadingEmails = false;
-                activeEmailRequestController = null;
+                emailView.controller = null;
                 refreshBtn.disabled = false;
                 refreshBtn.innerHTML = buttonLabel('refresh', '刷新');
                 if (autoRefreshBtn) {
@@ -11384,8 +11725,12 @@ Authorization: Bearer om_your_api_key
             const unreadClass = email.is_read ? '' : 'unread';
             const sender = getSenderProfile(email.from_email);
             const senderLogoUrl = resolveSenderLogoUrl(sender.email);
-            const attachmentIcon = email.has_attachments ? '<span style="color: #8b5cf6;">📎</span>' : '';
+            const attachmentIcon = email.has_attachments ? '<span style="color: var(--violet);">📎</span>' : '';
             const readIcon = email.is_read ? '✉️' : '📩';
+            const code = extractCode(email.subject);
+            const codeChip = code
+                ? `<button class="email-code-chip" type="button" title="复制验证码" onclick="copyVerifyCode(event, '${escapeHtml(code)}')"><span class="email-code-val">${escapeHtml(code)}</span>${icon('copy')}</button>`
+                : '';
 
             return `
                 <div class="email-item ${unreadClass}" data-message-id="${escapeHtml(email.message_id || '')}" onclick="showEmailDetail('${email.message_id}')">
@@ -11398,8 +11743,18 @@ Authorization: Bearer om_your_api_key
                         <div class="email-from">${readIcon} ${escapeHtml(sender.email)} ${attachmentIcon}</div>
                         <div class="email-preview">文件夹: ${escapeHtml(email.folder)} | 点击查看详情</div>
                     </div>
+                    ${codeChip}
                 </div>
             `;
+        }
+
+        async function copyVerifyCode(event, code) {
+            if (event) event.stopPropagation();
+            if (!code) return;
+            try {
+                await navigator.clipboard.writeText(code);
+                showNotification('验证码已复制', 'success');
+            } catch (e) { /* ignore */ }
         }
 
         async function showEmailDetail(messageId) {
@@ -11415,8 +11770,14 @@ Authorization: Bearer om_your_api_key
                 currentEmailMessageId = data.message_id;
                 currentEmailTagKeys = Array.isArray(data.tag_keys) ? data.tag_keys.map(normalizeKey) : [];
 
+                const detailCode = extractCode(data.subject, data.body_plain || '', (data.body_html || '').replace(/<[^>]+>/g, ' '));
+                const codeBanner = detailCode
+                    ? `<div class="email-code-banner"><span class="cb-label">验证码</span><span class="cb-code">${escapeHtml(detailCode)}</span><button class="btn btn-secondary btn-sm" type="button" onclick="copyVerifyCode(null, '${escapeHtml(detailCode)}')">${buttonLabel('copy', '复制')}</button></div>`
+                    : '';
+
                 document.getElementById('emailModalTitle').textContent = data.subject || '(无主题)';
                 document.getElementById('emailModalContent').innerHTML = `
+                    ${codeBanner}
                     <div class="email-detail-hero">
                         ${renderSenderAvatar(sender.initial, senderLogoUrl, 'email-detail-avatar', data.sender_avatar_url)}
                         <div class="email-detail-hero-copy">
@@ -12177,6 +12538,8 @@ Authorization: Bearer om_your_api_key
             if (relativePath.startsWith('/emails/')) {
                 const emailId = decodeURIComponent(relativePath.replace('/emails/', ''));
                 if (emailId) {
+                    emailView.mode = 'normal';
+                    updateEmailViewModeUi();
                     if (emailId !== currentAccount) {
                         resetEmailListState({ showLoading: true });
                     }
@@ -12209,6 +12572,330 @@ Authorization: Bearer om_your_api_key
             handleUrlRouting();
         });
 
+        /* ============================================================
+           桌面端能力移植：主题 / 快捷查看 / 验证码提取 / 自定义下拉 / 邮件视图状态模块
+           ============================================================ */
+
+        /* ---------- 主题：light / dark / system，切 :root[data-theme]，持久化 localStorage ---------- */
+        const THEME_KEY = 'mem.theme';
+        let themeMode = (function () {
+            try { const v = localStorage.getItem(THEME_KEY); if (v === 'light' || v === 'dark' || v === 'system') return v; } catch (e) {}
+            return 'system';
+        })();
+        function systemPrefersDark() {
+            try { return window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) { return false; }
+        }
+        function resolveTheme(mode) { return mode === 'system' ? (systemPrefersDark() ? 'dark' : 'light') : mode; }
+        function applyTheme(mode) {
+            try { document.documentElement.setAttribute('data-theme', resolveTheme(mode)); } catch (e) {}
+        }
+        function refreshThemeToggle() {
+            const btn = document.getElementById('themeToggleBtn');
+            const label = document.getElementById('themeToggleLabel');
+            if (!btn) return;
+            const iconName = themeMode === 'light' ? 'sun' : (themeMode === 'dark' ? 'moon' : 'monitor');
+            const text = themeMode === 'light' ? '浅色' : (themeMode === 'dark' ? '深色' : '跟随系统');
+            setButtonIcon(btn, iconName);
+            if (label) label.textContent = text;
+            btn.dataset.tooltip = '主题：' + text;
+            btn.setAttribute('aria-label', '主题：' + text);
+            btn.setAttribute('title', '主题：' + text);
+        }
+        function setTheme(mode) {
+            themeMode = mode;
+            try { localStorage.setItem(THEME_KEY, mode); } catch (e) {}
+            applyTheme(mode);
+            refreshThemeToggle();
+        }
+        function cycleTheme() {
+            const order = ['light', 'dark', 'system'];
+            setTheme(order[(order.indexOf(themeMode) + 1) % order.length]);
+        }
+        function initTheme() {
+            applyTheme(themeMode);
+            refreshThemeToggle();
+            try {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+                    if (themeMode === 'system') applyTheme('system');
+                });
+            } catch (e) {}
+        }
+
+        /* ---------- 快捷查看：固定一组邮箱，仅在这组间切换；持久化 localStorage ---------- */
+        const QUICKVIEW_KEY = 'mem.quickview.v2';
+        const QUICKVIEW_LEGACY = 'mem.quickview';
+        const quickview = { emails: [], current: '' };
+        (function readQuickview() {
+            try {
+                const raw = localStorage.getItem(QUICKVIEW_KEY);
+                if (raw) {
+                    const p = JSON.parse(raw);
+                    if (p && Array.isArray(p.emails)) {
+                        quickview.emails = p.emails.filter(e => typeof e === 'string');
+                        quickview.current = (typeof p.current === 'string' && quickview.emails.includes(p.current)) ? p.current : (quickview.emails[0] || '');
+                        return;
+                    }
+                }
+                const legacy = localStorage.getItem(QUICKVIEW_LEGACY);
+                if (legacy) { quickview.emails = [legacy]; quickview.current = legacy; }
+            } catch (e) {}
+        })();
+        function persistQuickview() {
+            try { localStorage.setItem(QUICKVIEW_KEY, JSON.stringify({ emails: quickview.emails, current: quickview.current })); } catch (e) {}
+        }
+        function isQuick(email) { return quickview.emails.includes(email); }
+        function addQuick(email) {
+            if (!email) return;
+            if (!quickview.emails.includes(email)) quickview.emails = quickview.emails.concat([email]);
+            quickview.current = email; persistQuickview();
+        }
+        function removeQuick(email) {
+            quickview.emails = quickview.emails.filter(e => e !== email);
+            if (quickview.current === email) quickview.current = quickview.emails[0] || '';
+            persistQuickview();
+        }
+        function toggleQuick(email) { if (quickview.emails.includes(email)) removeQuick(email); else addQuick(email); }
+        function setCurrentQuick(email) { if (quickview.emails.includes(email)) { quickview.current = email; persistQuickview(); } }
+
+        /* ---------- 验证码（OTP）提取：命中返回纯码，否则 null（移植自桌面端 verifyCode.ts） ---------- */
+        const VERIFY_CODE_KEYWORDS = /(验证码|校验码|动态码|动态密码|安全码|安全代码|登录码|确认码|verification\s*code|verification|one[\s-]?time|passcode|pass\s*code|security\s*code|\botp\b|\bcode\b)/i;
+        function pickVerifyCode(text) {
+            if (!text) return null;
+            const kw = text.match(VERIFY_CODE_KEYWORDS);
+            if (kw && kw.index != null) {
+                const start = Math.max(0, kw.index - 28);
+                const around = text.slice(start, kw.index + 60);
+                const digits = around.match(/(?<![0-9])([0-9]{4,8})(?![0-9])/);
+                if (digits) return digits[1];
+                const alnum = around.match(/\b([0-9A-Za-z]{5,8})\b/g);
+                if (alnum) {
+                    const code = alnum.find(s => /[0-9]/.test(s) && /^[0-9A-Za-z]+$/.test(s) && !/^[A-Za-z]+$/.test(s));
+                    if (code) return code.toUpperCase();
+                }
+            }
+            const six = text.match(/(?<![0-9])([0-9]{6})(?![0-9])/);
+            if (six) return six[1];
+            return null;
+        }
+        function extractCode() {
+            const text = Array.prototype.slice.call(arguments).filter(Boolean).join('  ');
+            return pickVerifyCode(text);
+        }
+
+        /* ---------- 自定义 Select（账户切换下拉，显示分类/标签；移植自桌面端 Select.svelte） ---------- */
+        function memSelectChevron() {
+            return '<svg class="mem-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>';
+        }
+        function memBadgeHtml(b) {
+            const soft = (b && b.tone === 'primary') ? '' : ' soft';
+            return `<span class="mem-badge${soft}">${escapeHtml((b && b.text) || '')}</span>`;
+        }
+        function createMemSelect(config) {
+            config = config || {};
+            const root = document.createElement('div');
+            root.className = 'mem-select' + (config.size === 'sm' ? ' sm' : '');
+            if (config.width) root.style.width = config.width;
+            let options = config.options || [];
+            let value = config.value || '';
+            let open = false;
+            const placeholder = config.placeholder || '';
+            const menuWidth = config.menuWidth || '';
+            const align = config.align || 'left';
+
+            function selected() { return options.find(o => o.value === value) || null; }
+            function triggerHtml() {
+                const sel = selected();
+                let inner;
+                if (sel) {
+                    const badges = (sel.badges && sel.badges.length) ? `<span class="mem-cur-badges">${sel.badges.map(memBadgeHtml).join('')}</span>` : '';
+                    inner = `<span class="mem-cur"><span class="mem-cur-label">${escapeHtml(sel.label)}</span>${badges}</span>`;
+                } else {
+                    inner = `<span class="mem-cur"><span class="mem-ph">${escapeHtml(placeholder)}</span></span>`;
+                }
+                return `<button type="button" class="mem-select-trigger" aria-haspopup="listbox" aria-expanded="${open}">${inner}${memSelectChevron()}</button>`;
+            }
+            function menuHtml() {
+                if (!open) return '';
+                let body;
+                if (!options.length) {
+                    body = `<div class="mem-select-empty">${escapeHtml(placeholder || '—')}</div>`;
+                } else {
+                    body = options.map(o => {
+                        const on = o.value === value;
+                        const sub = o.sublabel ? `<span class="mem-opt-sub">${escapeHtml(o.sublabel)}</span>` : '';
+                        const badges = (o.badges && o.badges.length) ? `<span class="mem-opt-badges">${o.badges.map(memBadgeHtml).join('')}</span>` : '';
+                        const tick = `<span class="mem-tick">${on ? UI_ICONS.check : ''}</span>`;
+                        return `<button type="button" class="mem-opt${on ? ' on' : ''}" role="option" aria-selected="${on}" data-value="${escapeHtml(o.value)}"><span class="mem-opt-main"><span class="mem-opt-label">${escapeHtml(o.label)}</span>${sub}</span>${badges}${tick}</button>`;
+                    }).join('');
+                }
+                const mw = menuWidth ? ` style="min-width:${menuWidth}"` : '';
+                return `<div class="mem-select-menu ${align}"${mw} role="listbox">${body}</div>`;
+            }
+            function render() {
+                root.classList.toggle('open', open);
+                root.innerHTML = triggerHtml() + menuHtml();
+                root.querySelector('.mem-select-trigger').addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+                if (open) {
+                    root.querySelectorAll('.mem-opt').forEach(function (btn) {
+                        btn.addEventListener('click', function (e) { e.stopPropagation(); choose(btn.dataset.value); });
+                    });
+                }
+            }
+            function toggle() { open = !open; render(); if (open) { attach(); } else { detach(); } }
+            function close() { if (open) { open = false; render(); detach(); } }
+            function choose(v) {
+                if (v !== value) { value = v; if (typeof config.onchange === 'function') config.onchange(v); }
+                close();
+            }
+            function onDocClick(e) { if (!root.contains(e.target)) close(); }
+            function onKey(e) { if (e.key === 'Escape') close(); }
+            function attach() { window.addEventListener('click', onDocClick, true); window.addEventListener('keydown', onKey); }
+            function detach() { window.removeEventListener('click', onDocClick, true); window.removeEventListener('keydown', onKey); }
+            render();
+            return {
+                el: root,
+                setOptions: function (next) { options = next || []; if (!selected()) value = ''; render(); },
+                setValue: function (v) { value = v || ''; render(); },
+                getValue: function () { return value; }
+            };
+        }
+
+        /* ---------- 邮件视图状态模块：维护当前视图标识 / 最新请求编号 / 初始空状态 ---------- */
+        const emailView = {
+            reqId: 0,
+            controller: null,
+            mode: 'normal', // 'normal' | 'quick'
+            abort: function () {
+                if (this.controller) { try { this.controller.abort(); } catch (e) {} this.controller = null; }
+            },
+            // 重置为初始空状态：中止在途请求、作废旧请求、清空列表上下文
+            reset: function () {
+                this.abort();
+                this.reqId += 1;
+                isLoadingEmails = false;
+                allEmails = [];
+                filteredEmails = [];
+                pendingInsertedEmailIds = [];
+                currentEmailMessageId = null;
+                currentEmailTagKeys = [];
+            },
+            // 开始一次请求：登记 controller、推进请求编号，返回快照令牌
+            begin: function (controller) {
+                this.abort();
+                this.controller = controller;
+                this.reqId += 1;
+                return { id: this.reqId, account: currentAccount, folder: currentEmailFolder, page: currentEmailPage };
+            },
+            // 令牌是否过期（视图已切换或有更新请求覆盖）
+            isStale: function (token) {
+                return token.id !== this.reqId
+                    || token.account !== currentAccount
+                    || token.folder !== currentEmailFolder
+                    || token.page !== currentEmailPage;
+            }
+        };
+
+        /* ---------- 快捷查看页（复用邮件视图，仅在固定邮箱间切换） ---------- */
+        function openQuickView() {
+            document.querySelectorAll('.page').forEach(function (p) { p.classList.add('hidden'); });
+            const emailsPage = document.getElementById('emailsPage');
+            if (emailsPage) emailsPage.classList.remove('hidden');
+            syncSidebarContext('quickView');
+            const titleEl = document.getElementById('pageTitle');
+            if (titleEl) titleEl.textContent = '快捷查看';
+            enterQuickViewMode();
+        }
+        function renderQuickViewEmpty() {
+            const list = document.getElementById('emailsList');
+            if (list) list.innerHTML = '<div class="text-center" style="padding:48px 24px;color:var(--mute);line-height:1.7;">还没有固定到快捷查看的邮箱。<br>在邮件页点「加入快捷查看」即可把当前邮箱固定到这里。</div>';
+            updateEmailStats([]);
+            const updated = document.getElementById('lastUpdateTime');
+            if (updated) updated.textContent = '-';
+        }
+        function enterQuickViewMode() {
+            emailView.mode = 'quick';
+            updateEmailViewModeUi();
+            const pinned = quickview.emails.slice();
+            if (!pinned.length) {
+                currentAccount = null;
+                emailView.reset();
+                renderQuickViewEmpty();
+                populateAccountSwitcher(null);
+                refreshQuickPinBtn();
+                syncAutoRefreshTimer();
+                return;
+            }
+            const target = (quickview.current && pinned.includes(quickview.current)) ? quickview.current : pinned[0];
+            currentAccount = target;
+            currentEmailFolder = 'all';
+            currentEmailPage = 1;
+            setCurrentQuick(target);
+            updateCurrentAccountHeader(target);
+            populateAccountSwitcher(target);
+            emailView.reset();
+            clearFilters(false);
+            const list = document.getElementById('emailsList');
+            if (list) list.innerHTML = '<div class="loading"><div class="loading-spinner"></div>正在加载邮件...</div>';
+            loadEmails();
+            refreshQuickPinBtn();
+            syncAutoRefreshTimer();
+        }
+        function updateEmailViewModeUi() {
+            const backBtn = document.getElementById('backToAccountsBtn');
+            if (backBtn) backBtn.style.display = emailView.mode === 'quick' ? 'none' : '';
+        }
+        function refreshQuickPinBtn() {
+            const btn = document.getElementById('quickPinBtn');
+            if (!btn) return;
+            const pinned = !!(currentAccount && isQuick(currentAccount));
+            btn.classList.toggle('active', pinned);
+            btn.disabled = !currentAccount;
+            const label = btn.querySelector('.quick-pin-label');
+            if (label) label.textContent = pinned ? '移出快捷查看' : '加入快捷查看';
+            const tip = pinned ? '移出快捷查看' : '加入快捷查看';
+            btn.dataset.tooltip = tip;
+            btn.setAttribute('aria-label', tip);
+            btn.setAttribute('title', tip);
+        }
+        function toggleQuickPin() {
+            if (!currentAccount) return;
+            toggleQuick(currentAccount);
+            const nowPinned = isQuick(currentAccount);
+            showNotification(nowPinned ? '已加入快捷查看' : '已移出快捷查看', 'success');
+            refreshQuickPinBtn();
+            if (emailView.mode === 'quick') {
+                if (!nowPinned) {
+                    const pinned = quickview.emails.slice();
+                    if (pinned.length) {
+                        const next = (quickview.current && pinned.includes(quickview.current)) ? quickview.current : pinned[0];
+                        if (next && next !== currentAccount) { switchCurrentAccount(next); return; }
+                        currentAccount = next || null;
+                        if (currentAccount) { updateCurrentAccountHeader(currentAccount); emailView.reset(); loadEmails(); }
+                    } else {
+                        currentAccount = null;
+                        emailView.reset();
+                        renderQuickViewEmpty();
+                    }
+                }
+                populateAccountSwitcher(currentAccount);
+                refreshQuickPinBtn();
+            }
+        }
+
+        /* 账户切换下拉的选项（含分类副标题 + 标签徽章） */
+        let accountSelectInstance = null;
+        function shortClassName(c) { return c ? (c.name_zh || c.nameZh || c.name_en || c.nameEn || c.key || '') : ''; }
+        function buildAccountSelectOptions(list) {
+            return (list || []).map(function (a) {
+                const tagDetails = Array.isArray(a.tag_details) ? a.tag_details : [];
+                return {
+                    value: a.email_id,
+                    label: a.email_id,
+                    sublabel: a.category ? shortClassName(a.category) : '',
+                    badges: tagDetails.map(function (t) { return { text: shortClassName(t), tone: 'soft' }; }).filter(function (b) { return b.text; })
+                };
+            });
+        }
     </script>
 </body>
 </html>

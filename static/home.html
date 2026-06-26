@@ -4,26 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Microsoft-Email-Manager | 批量管理 微软邮箱账户 · 邮件与 API 自动化中枢</title>
-    <link rel="icon" type="image/png" href="/static/assets/logo.png?v=20260406">
-    <link rel="shortcut icon" type="image/png" href="/static/assets/logo.png?v=20260406">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/assets/logo-black.svg?v=20260626">
+    <link rel="shortcut icon" type="image/svg+xml" href="/static/assets/logo-black.svg?v=20260626">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --ink: #171717; --body: #4d4d4d; --mute: #6b7280;
+            --canvas: #ffffff; --canvas-soft: #fafafa; --hairline: #ebebeb; --link: #0070f3;
+        }
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Geist', 'Inter', system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
         body {
-            background: #f8fafc;
+            background: #ffffff;
             scroll-behavior: smooth;
+            color: var(--ink);
         }
+        .font-mono-brand { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
         .gradient-hero {
             position: relative;
             overflow: hidden;
             isolation: isolate;
-            background:
-                radial-gradient(circle at 10% 20%, #0b2b3f 0%, #06212e 58%, #041924 100%);
+            background: var(--canvas);
         }
+        .hero-mesh {
+            position: absolute;
+            inset: -28% -12% auto -12%;
+            height: 78%;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(70px);
+            opacity: 0.45;
+            background: linear-gradient(110deg, #007cf0 0%, #00dfd8 28%, #7928ca 52%, #ff0080 76%, #f9cb28 100%);
+        }
+        .hero-grad-text {
+            background: linear-gradient(110deg, #007cf0, #7928ca 45%, #ff0080);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .btn-ink {
+            background: var(--ink); color: #fff; border-radius: 100px;
+            transition: filter .15s ease, transform .15s ease;
+        }
+        .btn-ink:hover { filter: brightness(1.18); }
+        .btn-ghost {
+            background: #fff; color: var(--ink); border: 1px solid var(--hairline); border-radius: 100px;
+            transition: border-color .15s ease, background .15s ease;
+        }
+        .btn-ghost:hover { border-color: #a1a1a1; background: var(--canvas-soft); }
         .hero-content {
             position: relative;
             z-index: 2;
@@ -427,20 +458,21 @@
         <div class="container-custom mx-auto flex flex-wrap justify-between items-center py-3 md:py-4">
             <div class="site-brand">
                 <span class="site-logo-badge" aria-hidden="true">
-                    <img src="/static/assets/logo.png" alt="" class="site-logo-image">
+                    <img src="/static/assets/logo-black.svg?v=20260626" alt="" class="site-logo-image">
                 </span>
                 <div class="site-brand-copy">
                     <div class="site-brand-title">
-                        <span class="font-bold text-xl tracking-tight text-gray-800">Microsoft<span class="text-sky-700">-Email-Manager</span></span>
-                        <span class="hidden md:inline-block text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">v2.0 · 批量管理</span>
+                        <span class="font-bold text-xl tracking-tight text-gray-900">Microsoft<span class="hero-grad-text">-Email-Manager</span></span>
+                        <span class="hidden md:inline-block text-xs font-mono-brand bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">v2.0 · 批量管理</span>
                     </div>
                 </div>
             </div>
             <div class="flex items-center gap-4 md:gap-6 text-sm font-medium">
-                <a href="#features" class="text-gray-600 hover:text-sky-700 transition hidden sm:block">特性</a>
-                <a href="#screenshots" class="text-gray-600 hover:text-sky-700 transition hidden sm:block">界面预览</a>
-                <a href="#deploy" class="text-gray-600 hover:text-sky-700 transition hidden sm:block">部署指南</a>
-                <a href="#faq" class="text-gray-600 hover:text-sky-700 transition hidden sm:block">常见问题</a>
+                <a href="#desktop" class="text-gray-600 hover:text-gray-900 transition hidden sm:block">桌面版</a>
+                <a href="#features" class="text-gray-600 hover:text-gray-900 transition hidden sm:block">特性</a>
+                <a href="#screenshots" class="text-gray-600 hover:text-gray-900 transition hidden sm:block">界面预览</a>
+                <a href="#deploy" class="text-gray-600 hover:text-gray-900 transition hidden sm:block">部署指南</a>
+                <a href="#faq" class="text-gray-600 hover:text-gray-900 transition hidden sm:block">常见问题</a>
                 <a href="https://github.com/Maishan-Inc/Microsoft-Email-Manager" target="_blank" class="flex items-center gap-1.5 bg-gray-900 text-white px-4 py-1.5 rounded-full text-sm hover:bg-gray-800 transition shadow-sm">
                     <i class="fab fa-github"></i> <span>GitHub</span>
                 </a>
@@ -448,69 +480,77 @@
         </div>
     </nav>
 
-    <section class="gradient-hero text-white">
-        <div class="hero-grid-layer" aria-hidden="true"></div>
-        <div class="hero-dot-layer" aria-hidden="true"></div>
-        <div class="hero-glow hero-glow-a" aria-hidden="true"></div>
-        <div class="hero-glow hero-glow-b" aria-hidden="true"></div>
-        <svg class="hero-network hero-network-top" viewBox="0 0 260 180" aria-hidden="true">
-            <polyline points="28,132 74,96 118,112 158,66 212,84" />
-            <line x1="74" y1="96" x2="58" y2="44" />
-            <line x1="118" y1="112" x2="126" y2="150" />
-            <line x1="158" y1="66" x2="204" y2="38" />
-            <circle cx="28" cy="132" r="4" />
-            <circle cx="74" cy="96" r="4" />
-            <circle cx="118" cy="112" r="4" />
-            <circle cx="158" cy="66" r="4" />
-            <circle cx="212" cy="84" r="4" />
-            <circle cx="58" cy="44" r="3.6" />
-            <circle cx="126" cy="150" r="3.6" />
-            <circle cx="204" cy="38" r="3.6" />
-        </svg>
-        <svg class="hero-network hero-network-bottom" viewBox="0 0 340 220" aria-hidden="true">
-            <polyline points="52,174 114,142 162,156 218,110 286,124" />
-            <line x1="114" y1="142" x2="142" y2="82" />
-            <line x1="162" y1="156" x2="182" y2="196" />
-            <line x1="218" y1="110" x2="264" y2="64" />
-            <line x1="286" y1="124" x2="316" y2="168" />
-            <circle cx="52" cy="174" r="4.4" />
-            <circle cx="114" cy="142" r="4.4" />
-            <circle cx="162" cy="156" r="4.4" />
-            <circle cx="218" cy="110" r="4.4" />
-            <circle cx="286" cy="124" r="4.4" />
-            <circle cx="142" cy="82" r="4" />
-            <circle cx="182" cy="196" r="4" />
-            <circle cx="264" cy="64" r="4" />
-            <circle cx="316" cy="168" r="4" />
-        </svg>
-        <div class="container-custom mx-auto py-16 md:py-24 hero-content">
+    <section class="gradient-hero">
+        <div class="hero-mesh" aria-hidden="true"></div>
+        <div class="container-custom mx-auto py-20 md:py-28 hero-content" style="position:relative;z-index:2;">
             <div class="max-w-3xl">
-                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm mb-6">
-                    <i class="fas fa-rocket"></i>
-                    <span>开源 · 企业级批量邮箱管理面板</span>
-                </div>
-                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">批量管理 微软邮箱账户<br>邮件与 API 自动化中枢</h1>
-                <p class="text-lg md:text-xl text-gray-200 mt-6 max-w-2xl leading-relaxed">
-                    一站式管理成百上千个微软邮箱账户，邮件检索、标签分类、API Key 额度控制，支持 Docker 一键部署。
+                <a href="#desktop" class="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-1.5 text-sm text-gray-700 mb-6 shadow-sm hover:border-gray-300 transition">
+                    <span class="font-mono-brand text-xs px-1.5 py-0.5 rounded bg-gray-900 text-white">NEW</span>
+                    <span>桌面版已推出 · 支持 Windows / Linux / macOS</span>
+                    <i class="fas fa-arrow-right text-xs text-gray-400"></i>
+                </a>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.05] text-gray-900">批量管理 微软邮箱账户<br><span class="hero-grad-text">邮件与 API 自动化中枢</span></h1>
+                <p class="text-lg md:text-xl text-gray-500 mt-6 max-w-2xl leading-relaxed">
+                    一站式管理成百上千个微软邮箱账户，邮件检索、标签分类、API Key 额度控制；Web 端支持 Docker 一键部署，桌面端本地加密、隐私优先。
                 </p>
                 <div class="flex flex-wrap gap-4 mt-10">
-                    <a href="#deploy" class="bg-white text-sky-800 font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-gray-100 transition flex items-center gap-2">
-                        <i class="fas fa-cloud-arrow-down"></i> 快速部署
+                    <a href="#desktop" class="btn-ink font-semibold px-6 py-3 shadow-lg flex items-center gap-2">
+                        <i class="fas fa-desktop"></i> 下载桌面版
                     </a>
-                    <a href="https://github.com/Maishan-Inc/Microsoft-Email-Manager" target="_blank" class="bg-transparent border border-white/70 text-white font-medium px-6 py-3 rounded-xl hover:bg-white/10 transition flex items-center gap-2">
+                    <a href="#deploy" class="btn-ghost font-semibold px-6 py-3 flex items-center gap-2">
+                        <i class="fas fa-cloud-arrow-down"></i> 快速部署 Web 版
+                    </a>
+                    <a href="https://github.com/Maishan-Inc/Microsoft-Email-Manager" target="_blank" class="btn-ghost px-6 py-3 flex items-center gap-2">
                         <i class="fab fa-github"></i> GitHub 仓库
                     </a>
-                    <a href="#screenshots" class="bg-transparent text-white/90 border border-white/30 px-6 py-3 rounded-xl hover:bg-white/5 transition flex items-center gap-2">
-                        <i class="fas fa-images"></i> 产品预览
-                    </a>
                 </div>
-                <div class="flex flex-wrap gap-6 mt-12 text-sm text-gray-200/80">
-                    <div><i class="fas fa-check-circle text-emerald-300 mr-1"></i> 批量导入账户</div>
-                    <div><i class="fas fa-check-circle text-emerald-300 mr-1"></i> 实时邮件同步</div>
-                    <div><i class="fas fa-check-circle text-emerald-300 mr-1"></i> API Key 额度管理</div>
-                    <div><i class="fas fa-check-circle text-emerald-300 mr-1"></i> 标签 & 全文检索</div>
+                <div class="flex flex-wrap gap-x-6 gap-y-3 mt-12 text-sm text-gray-500">
+                    <div><i class="fas fa-check-circle text-emerald-500 mr-1"></i> 批量导入账户</div>
+                    <div><i class="fas fa-check-circle text-emerald-500 mr-1"></i> 实时邮件同步</div>
+                    <div><i class="fas fa-check-circle text-emerald-500 mr-1"></i> API Key 额度管理</div>
+                    <div><i class="fas fa-check-circle text-emerald-500 mr-1"></i> 标签 & 全文检索</div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section id="desktop" class="py-20 bg-white border-t border-gray-100">
+        <div class="container-custom mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="font-mono-brand text-xs uppercase tracking-widest text-gray-500">DESKTOP · 桌面版</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-3">桌面版已推出 · 三端原生支持</h2>
+                <p class="text-gray-500 mt-4">基于 Tauri + Rust + Svelte 构建，数据全本地加密（AES-256-GCM / Argon2id），不连任何后端服务器；主进程内存约 47MB。提供 Windows / Linux / macOS 安装包。</p>
+            </div>
+            <div class="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <a href="https://github.com/Maishan-Inc/Microsoft-Email-Manager-Desktop/releases/latest" target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl border border-gray-200 p-7 text-center transition hover:-translate-y-1 hover:shadow-xl hover:border-gray-300">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-gray-900 text-white flex items-center justify-center text-2xl"><i class="fab fa-windows"></i></div>
+                    <h3 class="font-bold text-lg mt-5 text-gray-900">Windows</h3>
+                    <p class="text-sm text-gray-500 mt-1">Windows 10 / 11</p>
+                    <p class="font-mono-brand text-xs text-gray-400 mt-3">.msi · .exe (NSIS)</p>
+                    <span class="inline-flex items-center gap-1.5 mt-5 text-sm font-semibold text-gray-900 group-hover:gap-2.5 transition-all"><i class="fas fa-download"></i> 下载安装包</span>
+                </a>
+                <a href="https://github.com/Maishan-Inc/Microsoft-Email-Manager-Desktop/releases/latest" target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl border border-gray-200 p-7 text-center transition hover:-translate-y-1 hover:shadow-xl hover:border-gray-300">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-gray-900 text-white flex items-center justify-center text-2xl"><i class="fab fa-linux"></i></div>
+                    <h3 class="font-bold text-lg mt-5 text-gray-900">Linux</h3>
+                    <p class="text-sm text-gray-500 mt-1">webkit2gtk · libssl</p>
+                    <p class="font-mono-brand text-xs text-gray-400 mt-3">.AppImage · .deb · .rpm</p>
+                    <span class="inline-flex items-center gap-1.5 mt-5 text-sm font-semibold text-gray-900 group-hover:gap-2.5 transition-all"><i class="fas fa-download"></i> 下载安装包</span>
+                </a>
+                <a href="https://github.com/Maishan-Inc/Microsoft-Email-Manager-Desktop/releases/latest" target="_blank" rel="noopener noreferrer" class="group bg-white rounded-2xl border border-gray-200 p-7 text-center transition hover:-translate-y-1 hover:shadow-xl hover:border-gray-300">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-gray-900 text-white flex items-center justify-center text-2xl"><i class="fab fa-apple"></i></div>
+                    <h3 class="font-bold text-lg mt-5 text-gray-900">macOS</h3>
+                    <p class="text-sm text-gray-500 mt-1">Apple Silicon / Intel</p>
+                    <p class="font-mono-brand text-xs text-gray-400 mt-3">.dmg · .app</p>
+                    <span class="inline-flex items-center gap-1.5 mt-5 text-sm font-semibold text-gray-900 group-hover:gap-2.5 transition-all"><i class="fas fa-download"></i> 下载安装包</span>
+                </a>
+            </div>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
+                <span><i class="fas fa-lock text-emerald-500 mr-1"></i> 本地加密 · 主密码不落盘</span>
+                <span><i class="fas fa-shield-halved text-emerald-500 mr-1"></i> 可选 2FA / 助记词恢复</span>
+                <span><i class="fas fa-feather text-emerald-500 mr-1"></i> 系统 WebView · 低内存占用</span>
+                <a href="https://github.com/Maishan-Inc/Microsoft-Email-Manager-Desktop" target="_blank" class="text-gray-900 font-medium hover:underline"><i class="fab fa-github mr-1"></i> 源码仓库</a>
+            </div>
+            <p class="text-center text-xs text-gray-400 mt-6">下载按钮跳转至 GitHub Releases，按系统选择对应安装包即可。</p>
         </div>
     </section>
 
