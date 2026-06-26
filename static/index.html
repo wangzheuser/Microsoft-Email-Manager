@@ -5374,14 +5374,65 @@
         .email-account-menu-item:hover { background: var(--canvas-soft-2); }
         .email-account-switcher-label { color: var(--mute); }
 
-        /* ---- 启动/认证 surface（浅色 token，避免深色模式残留旧色） ---- */
+        /* ===== 启动 / 引导 / 登录 / 认证：整套套色到 Vercel token（浅/深一致） ===== */
         .boot-splash { background: var(--canvas-soft); color: var(--ink); }
         .boot-splash-card { background: var(--canvas); border: 1px solid var(--hairline); box-shadow: var(--shadow-2); }
-        .auth-shell, .auth-screen { background: var(--canvas-soft); }
-        .auth-panel, .auth-card, .auth-stage { background: var(--canvas); }
-        .auth-brand-copy h1, .auth-login-brand-copy h1, .auth-stage-header h3 { color: var(--ink); }
-        .auth-brand-copy p, .auth-login-brand-copy p, .auth-stage-header p { color: var(--body); }
+        .boot-splash-card h2 { color: var(--ink); }
+        .boot-splash-card p { color: var(--body); }
+        .boot-splash-spinner { border-color: var(--hairline); border-top-color: var(--ink); }
+
+        /* 容器：去掉蓝绿渐变与装饰光斑 */
+        .auth-shell { background: var(--canvas-soft); }
+        .auth-shell::before, .auth-shell::after, .auth-hero::after { content: none; display: none; }
+
+        /* 卡片面板：玻璃拟物 → canvas + hairline + 轻阴影 */
+        .auth-hero, .auth-stage-fill, .auth-login-view {
+            background: var(--canvas); border: 1px solid var(--hairline);
+            box-shadow: var(--shadow-2); backdrop-filter: none; border-radius: var(--r-xl);
+        }
+        .auth-hero, .auth-panel { backdrop-filter: none; }
+
+        /* 品牌 logo */
+        .auth-brand-logo { background: var(--canvas); border: 1px solid var(--hairline); box-shadow: var(--shadow-1); }
         .auth-brand-logo-image { filter: invert(var(--logo-invert)); }
+        .auth-brand-mark, .auth-brand-logo.auth-brand-logo-lg .auth-brand-mark { background: var(--canvas-soft-2); color: var(--ink); box-shadow: none; }
+
+        /* 文字 */
+        .auth-brand-copy h1, .auth-hero h2, .auth-panel h3,
+        .auth-login-brand-copy h1, .auth-stage-header h3, .auth-agreement h4,
+        .auth-agreement-scroll h4, .auth-mode-card-title strong, .auth-feature strong { color: var(--ink); }
+        .auth-brand-copy p, .auth-hero p, .auth-panel p, .auth-login-brand-copy p,
+        .auth-stage-header p, .auth-feature span, .auth-mode-card-title span,
+        .auth-mode-card-copy, .auth-check { color: var(--body); }
+        .auth-muted, .auth-field-hint, .auth-field-label, .auth-scroll-status, .auth-setup-footer { color: var(--mute); }
+        .auth-login-kicker { color: var(--link); }
+
+        /* 协议框 */
+        .auth-agreement, .auth-agreement-scroll {
+            background: var(--canvas-soft); border: 1px solid var(--hairline); color: var(--body);
+        }
+
+        /* 认证模式卡片 */
+        .auth-mode-card { background: var(--canvas); border: 1px solid var(--hairline); color: var(--ink); }
+        .auth-mode-card:hover:not(:disabled), .auth-mode-card:focus-visible:not(:disabled) { border-color: var(--hairline-strong); }
+        .auth-mode-card.is-active { border-color: var(--ink); background: var(--canvas-soft); outline: 4px solid var(--focus-ring); }
+        .auth-mode-card.is-disabled, .auth-mode-card:disabled { background: var(--canvas-soft); border-color: var(--hairline); }
+        .auth-mode-badge { background: var(--canvas-soft-2); color: var(--body); }
+        .auth-mode-note { background: var(--canvas-soft-2); color: var(--body); }
+        .auth-step-note { background: var(--link-bg-soft); color: var(--link-deep); }
+
+        /* 认证输入框（覆盖玻璃拟物硬编码） */
+        .auth-form .form-input {
+            background: var(--canvas); border: 1px solid var(--hairline); color: var(--ink); box-shadow: none;
+        }
+        .auth-form .form-input::placeholder { color: var(--mute); }
+        .auth-form .form-input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); background: var(--canvas); }
+
+        /* 禁用按钮（覆盖硬编码灰 !important，使深色一致） */
+        #authAgreementContinue:disabled, .btn:disabled {
+            background: var(--canvas-soft-2) !important; color: var(--mute) !important;
+            border-color: var(--hairline) !important; box-shadow: none !important;
+        }
 
         /* ---- 响应式补充（来源顺序在前面 @media 之后，需重申） ---- */
         @media (max-width: 820px) {
